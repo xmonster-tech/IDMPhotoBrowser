@@ -548,7 +548,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 - (void)viewDidLoad {
     // Transition animation
-    [self performPresentAnimation];
+    if (_senderViewForAnimation) {
+        [self performPresentAnimation];
+    }
     
     // View
 	self.view.backgroundColor = [UIColor colorWithWhite:(_useWhiteBackgroundColor ? 1 : 0) alpha:1];
@@ -569,7 +571,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
     //page control
     _pageControl = [[UIPageControl alloc] init];
-    _pageControl.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2, [[UIScreen mainScreen] bounds].size.height - 80);
+    _pageControl.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2, [[UIScreen mainScreen] bounds].size.height - 20);
     _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
     _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(CGFloat)217/255 green:(CGFloat)70/255 blue:(CGFloat)72/255 alpha:1];
     _pageControl.enabled = NO;
