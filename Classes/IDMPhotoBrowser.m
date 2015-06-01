@@ -576,6 +576,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(CGFloat)217/255 green:(CGFloat)70/255 blue:(CGFloat)72/255 alpha:1];
     _pageControl.enabled = NO;
     _pageControl.numberOfPages = [self numberOfPhotos];
+    _pageControl.currentPage = _initalPageIndex;
     [self.view addSubview:_pageControl];
     
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -874,7 +875,10 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 		// Get image or obtain in background
 		if ([photo underlyingImage]) {
 			return [photo underlyingImage];
-		} else {
+        } else if([photo thumbnailImage]){
+            [photo loadUnderlyingImageAndNotify];
+            return [photo thumbnailImage];
+        }else {
             [photo loadUnderlyingImageAndNotify];
 		}
 	}

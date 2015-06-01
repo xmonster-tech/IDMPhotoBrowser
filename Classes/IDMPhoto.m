@@ -16,6 +16,7 @@
 
     // Image
     UIImage *_underlyingImage;
+    UIImage *_thumbnailImage;
 
     // Other
     NSString *_caption;
@@ -24,6 +25,7 @@
 
 // Properties
 @property (nonatomic, strong) UIImage *underlyingImage;
+@property (nonatomic, strong) UIImage *thumbnailImage;
 
 // Methods
 - (void)imageLoadingComplete;
@@ -34,7 +36,8 @@
 @implementation IDMPhoto
 
 // Properties
-@synthesize underlyingImage = _underlyingImage, 
+@synthesize underlyingImage = _underlyingImage,
+thumbnailImage = _thumbnailImage,
 photoURL = _photoURL,
 caption = _caption;
 
@@ -95,6 +98,10 @@ caption = _caption;
     return photos;
 }
 
++ (IDMPhoto *)photoWithURL:(NSURL *)url thumbnail:(UIImage *)thumbnail{
+    return [[IDMPhoto alloc] initWithURL:[NSURL URLWithString:url] thumbnail:thumbnail];
+}
+
 #pragma mark NSObject
 
 - (id)initWithImage:(UIImage *)image {
@@ -118,10 +125,23 @@ caption = _caption;
 	return self;
 }
 
+-(id)initWithURL:(NSURL *)url thumbnail:(UIImage *)thumbnail{
+    if ((self = [super init])) {
+        _photoURL = [url copy];
+        _thumbnailImage = thumbnail;
+    }
+    return self;
+}
+
+
 #pragma mark IDMPhoto Protocol Methods
 
 - (UIImage *)underlyingImage {
     return _underlyingImage;
+}
+
+- (UIImage *)thumbnailImage{
+    return _thumbnailImage;
 }
 
 - (void)loadUnderlyingImageAndNotify {

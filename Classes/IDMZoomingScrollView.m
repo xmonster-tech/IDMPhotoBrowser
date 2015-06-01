@@ -97,7 +97,11 @@
 
 // Get and display image
 - (void)displayImage {
-	if (_photo && _photoImageView.image == nil) {
+    if (_progressView && [_photo underlyingImage] != nil) {
+        [_progressView removeFromSuperview];
+        _progressView = nil;
+    }
+	if (_photo && (_photoImageView.image == nil || [_photoImageView.image isEqual:[_photo thumbnailImage]])) {
 		// Reset
 		self.maximumZoomScale = 1;
 		self.minimumZoomScale = 1;
@@ -110,7 +114,6 @@
 		if (img) {
             // Hide ProgressView
             //_progressView.alpha = 0.0f;
-            [_progressView removeFromSuperview];
             
             // Set image
 			_photoImageView.image = img;
