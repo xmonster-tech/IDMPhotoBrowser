@@ -24,6 +24,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     
 	// Views
 	UIScrollView *_pagingScrollView;
+    UIPageControl *_pageControl;
 	
     // Gesture
     UIPanGestureRecognizer *_panGesture;
@@ -565,6 +566,15 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 	_pagingScrollView.backgroundColor = [UIColor clearColor];
     _pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
 	[self.view addSubview:_pagingScrollView];
+    
+    //page control
+    _pageControl = [[UIPageControl alloc] init];
+    _pageControl.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2, [[UIScreen mainScreen] bounds].size.height - 80);
+    _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+    _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(CGFloat)217/255 green:(CGFloat)70/255 blue:(CGFloat)72/255 alpha:1];
+    _pageControl.enabled = NO;
+    _pageControl.numberOfPages = [self numberOfPhotos];
+    [self.view addSubview:_pageControl];
     
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     
@@ -1111,6 +1121,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         
         if(_arrowButtonsChangePhotosAnimated) [self updateToolbar];
     }
+    NSInteger page = _pagingScrollView.contentOffset.x / _pagingScrollView.frame.size.width;
+    _pageControl.currentPage = page;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -1239,6 +1251,11 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         [self dismissPhotoBrowserAnimated:YES];
     }
 }
+
+- (void)closePhotoBrowser{
+    [self doneButtonPressed:nil];
+}
+
 
 - (void)actionButtonPressed:(id)sender {
     id <IDMPhoto> photo = [self photoAtIndex:_currentPageIndex];

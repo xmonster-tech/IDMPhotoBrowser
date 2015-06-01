@@ -258,7 +258,14 @@
 #pragma mark - Tap Detection
 
 - (void)handleSingleTap:(CGPoint)touchPoint {
-	[_photoBrowser performSelector:@selector(toggleControls) withObject:nil afterDelay:0.2];
+//	[_photoBrowser performSelector:@selector(toggleControls) withObject:nil afterDelay:0.2];
+    if (self.zoomScale == self.minimumZoomScale) {
+        [self performSelector:@selector(closeBrowser) withObject:nil afterDelay:0.2];
+    }
+}
+
+- (void)closeBrowser{
+    [_photoBrowser closePhotoBrowser];
 }
 
 - (void)handleDoubleTap:(CGPoint)touchPoint {
@@ -280,7 +287,10 @@
 	}
 	
 	// Delay controls
-	[_photoBrowser hideControlsAfterDelay];
+//	[_photoBrowser hideControlsAfterDelay];
+    
+    //remove single tap selector
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(closeBrowser) object: nil];
 }
 
 // Image View

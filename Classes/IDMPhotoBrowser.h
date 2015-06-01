@@ -80,4 +80,7 @@
 // Get IDMPhoto at index
 - (id<IDMPhoto>)photoAtIndex:(NSUInteger)index;
 
+// close photo browser
+- (void)closePhotoBrowser;
+
 @end
