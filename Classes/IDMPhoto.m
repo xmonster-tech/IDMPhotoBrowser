@@ -155,6 +155,11 @@ caption = _caption;
             // Load async from file
             [self performSelectorInBackground:@selector(loadImageFromFileAsync) withObject:nil];
         } else if (_photoURL) {
+            //优先使用外部image loader
+            if (self.loadBlock != nil) {
+                self.loadBlock(_photoURL);
+                return;
+            }
             // Load async from web (using AFNetworking)
             NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_photoURL
                                                           cachePolicy:NSURLRequestReturnCacheDataElseLoad
@@ -165,15 +170,17 @@ caption = _caption;
 
             [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
                 UIImage *image = responseObject;
-                self.underlyingImage = image;
-                [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
+                [self loadFinished:image];
+//                self.underlyingImage = image;
+//                [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) { }];
             
             [op setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
                 CGFloat progress = ((CGFloat)totalBytesRead)/((CGFloat)totalBytesExpectedToRead);
-                if (self.progressUpdateBlock) {
-                    self.progressUpdateBlock(progress);
-                }
+                [self updateProgress:progress];
+//                if (self.progressUpdateBlock) {
+//                    self.progressUpdateBlock(progress);
+//                }
             }];
             
             [[NSOperationQueue mainQueue] addOperation:op];
@@ -182,6 +189,21 @@ caption = _caption;
             self.underlyingImage = nil;
             [self imageLoadingComplete];
         }
+    }
+}
+
+- (void)loadFinished:(UIImage *)image{
+    self.underlyingImage = image;
+    [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
+}
+
+- (void)loadFailed:(NSError *)error{
+    
+}
+
+- (void)updateProgress:(CGFloat)progress{
+    if (self.progressUpdateBlock) {
+        self.progressUpdateBlock(progress);
     }
 }
 
@@ -311,6 +333,10 @@ caption = _caption;
     _loadingInProgress = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:IDMPhoto_LOADING_DID_END_NOTIFICATION
                                                         object:self];
+}
+
+- (void)setCustomImageLoader:(OnLoadBlock)loadBlock{
+    self.loadBlock = loadBlock;
 }
 
 @end

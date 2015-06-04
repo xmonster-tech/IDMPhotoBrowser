@@ -18,11 +18,13 @@
 
 // Progress download block, used to update the circularView
 typedef void (^IDMProgressUpdateBlock)(CGFloat progress);
+typedef void (^OnLoadBlock)(NSURL *url);
 
 // Properties
 @property (nonatomic, strong) NSString *caption;
 @property (nonatomic, strong) NSURL *photoURL;
 @property (nonatomic, strong) IDMProgressUpdateBlock progressUpdateBlock;
+@property (nonatomic, strong) OnLoadBlock loadBlock;
 
 // Class
 + (IDMPhoto *)photoWithImage:(UIImage *)image;
@@ -39,6 +41,12 @@ typedef void (^IDMProgressUpdateBlock)(CGFloat progress);
 - (id)initWithFilePath:(NSString *)path;
 - (id)initWithURL:(NSURL *)url;
 - (id)initWithURL:(NSURL *)url thumbnail:(UIImage *)thumbnail;
+
+//使用外部的image loader
+- (void)setCustomImageLoader:(OnLoadBlock)loadBlock;
+- (void)updateProgress:(CGFloat)progress;
+- (void)loadFinished:(UIImage *)image;
+- (void)loadFailed:(NSError *)error;
 
 @end
 
