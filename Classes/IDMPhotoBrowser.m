@@ -430,6 +430,12 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 - (void)performCloseAnimationWithScrollView:(IDMZoomingScrollView*)scrollView {
     float fadeAlpha = 1 - fabs(scrollView.frame.origin.y)/scrollView.frame.size.height;
+    UIView *closeAnimationView = [self.delegate getCloseAnimationView:_currentPageIndex];
+    if (closeAnimationView != nil) {
+        _senderViewForAnimation.hidden = NO;
+        _senderViewForAnimation = closeAnimationView;
+        _senderViewOriginalFrame = [_senderViewForAnimation.superview convertRect:_senderViewForAnimation.frame toView:nil];
+    }
     
     UIImage *imageFromView = [scrollView.photo underlyingImage];
     if (imageFromView == nil) {
@@ -1251,7 +1257,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 #pragma mark - Buttons
 
 - (void)doneButtonPressed:(id)sender {
-    if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+//    if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+    if ((_senderViewForAnimation && _currentPageIndex == _initalPageIndex) || [self.delegate getCloseAnimationView:_currentPageIndex] != nil) {
         IDMZoomingScrollView *scrollView = [self pageDisplayedAtIndex:_currentPageIndex];
         [self performCloseAnimationWithScrollView:scrollView];
     }
