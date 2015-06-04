@@ -435,6 +435,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         if (closeAnimationView != nil) {
             _senderViewForAnimation.hidden = NO;
             _senderViewForAnimation = closeAnimationView;
+            _senderViewForAnimation.hidden = YES;
             _senderViewOriginalFrame = [_senderViewForAnimation.superview convertRect:_senderViewForAnimation.frame toView:nil];
         }
     }
