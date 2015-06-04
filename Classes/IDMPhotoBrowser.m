@@ -432,6 +432,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     float fadeAlpha = 1 - fabs(scrollView.frame.origin.y)/scrollView.frame.size.height;
     
     UIImage *imageFromView = [scrollView.photo underlyingImage];
+    if (imageFromView == nil) {
+        imageFromView = [scrollView.photo thumbnailImage];
+    }
     //imageFromView = [self rotateImageToCurrentOrientation:imageFromView];
     
     CGRect screenBound = [[UIScreen mainScreen] bounds];
@@ -887,7 +890,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (void)loadAdjacentPhotosIfNecessary:(id<IDMPhoto>)photo {
-    return;//jamie not load adjacent photo for enhance performance
+    return;//not load adjacent image jamie
     IDMZoomingScrollView *page = [self pageDisplayingPhoto:photo];
     if (page) {
         // If page is current page then initiate loading of previous and next pages
