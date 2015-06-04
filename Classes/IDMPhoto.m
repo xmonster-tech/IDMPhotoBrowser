@@ -99,7 +99,7 @@ caption = _caption;
 }
 
 + (IDMPhoto *)photoWithURL:(NSURL *)url thumbnail:(UIImage *)thumbnail{
-    return [[IDMPhoto alloc] initWithURL:[NSURL URLWithString:url] thumbnail:thumbnail];
+    return [[IDMPhoto alloc] initWithURL:url thumbnail:thumbnail];
 }
 
 #pragma mark NSObject
