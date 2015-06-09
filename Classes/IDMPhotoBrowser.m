@@ -899,7 +899,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (void)loadAdjacentPhotosIfNecessary:(id<IDMPhoto>)photo {
-    return;//not load adjacent image jamie
     IDMZoomingScrollView *page = [self pageDisplayingPhoto:photo];
     if (page) {
         // If page is current page then initiate loading of previous and next pages
