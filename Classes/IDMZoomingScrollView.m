@@ -91,6 +91,7 @@
     self.photo = nil;
     [_captionView removeFromSuperview];
     self.captionView = nil;
+    self.selectedButton = nil;
 }
 
 #pragma mark - Image
