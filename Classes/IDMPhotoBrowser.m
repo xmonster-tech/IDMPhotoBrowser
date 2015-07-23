@@ -1330,7 +1330,12 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 #pragma mark - Buttons
 
 - (void)doneButtonPressed:(id)sender {
-//    if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+    if ([self.delegate respondsToSelector:@selector(getCloseAnimationView:)] && [self.delegate getCloseAnimationView:_currentPageIndex] == nil) {
+        _senderViewForAnimation.hidden = NO;
+        [self prepareForClosePhotoBrowser];
+        [self dismissPhotoBrowserAnimated:YES];
+        return;
+    }
     if ((_senderViewForAnimation && _currentPageIndex == _initalPageIndex)
         || ([self.delegate respondsToSelector:@selector(getCloseAnimationView:)] && [self.delegate getCloseAnimationView:_currentPageIndex] != nil)) {
         IDMZoomingScrollView *scrollView = [self pageDisplayedAtIndex:_currentPageIndex];
