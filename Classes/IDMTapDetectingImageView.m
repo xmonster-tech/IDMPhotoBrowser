@@ -14,23 +14,32 @@
 
 - (id)initWithFrame:(CGRect)frame {
 	if ((self = [super initWithFrame:frame])) {
-		self.userInteractionEnabled = YES;
+//		self.userInteractionEnabled = YES;
+        [self commonInit];
 	}
 	return self;
 }
 
 - (id)initWithImage:(UIImage *)image {
 	if ((self = [super initWithImage:image])) {
-		self.userInteractionEnabled = YES;
+//		self.userInteractionEnabled = YES;
+        [self commonInit];
 	}
 	return self;
 }
 
 - (id)initWithImage:(UIImage *)image highlightedImage:(UIImage *)highlightedImage {
 	if ((self = [super initWithImage:image highlightedImage:highlightedImage])) {
-		self.userInteractionEnabled = YES;
+//		self.userInteractionEnabled = YES;
+        [self commonInit];
 	}
 	return self;
+}
+
+- (void)commonInit{
+    self.userInteractionEnabled = YES;
+    UILongPressGestureRecognizer *gestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    [self addGestureRecognizer:gestureRecognizer];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -67,4 +76,11 @@
 		[tapDelegate imageView:self tripleTapDetected:touch];
 }
 
+- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        if ([tapDelegate respondsToSelector:@selector(longPressDetected:)]) {
+            [tapDelegate longPressDetected:recognizer];
+        }
+    }
+}
 @end

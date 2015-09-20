@@ -25,6 +25,7 @@
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected;
 - (IDMCaptionView *)photoBrowser:(IDMPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
 - (UIView *)getCloseAnimationView:(NSInteger)currentIndex;
+- (void)longPressDetected:(UILongPressGestureRecognizer *)recognizer;
 @end
 
 // IDMPhotoBrowser
