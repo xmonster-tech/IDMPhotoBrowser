@@ -290,12 +290,21 @@
 //	[_photoBrowser hideControlsAfterDelay];
 }
 
+- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer{
+    if ([_photoBrowser.delegate respondsToSelector:@selector(longPressDetected:)]) {
+        [_photoBrowser.delegate longPressDetected:recognizer];
+    }
+}
+
 // Image View
 - (void)imageView:(UIImageView *)imageView singleTapDetected:(UITouch *)touch { 
     [self handleSingleTap:[touch locationInView:imageView]];
 }
 - (void)imageView:(UIImageView *)imageView doubleTapDetected:(UITouch *)touch {
     [self handleDoubleTap:[touch locationInView:imageView]];
+}
+- (void)longPressDetected:(UILongPressGestureRecognizer *)recognizer{
+    [self handleLongPress:recognizer];
 }
 
 // Background View
