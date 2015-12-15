@@ -306,7 +306,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
         if(scrollView.center.y > viewHalfHeight+40 || scrollView.center.y < viewHalfHeight-40) // Automatic Dismiss View
         {
-            if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+        if ((_senderViewForAnimation && _currentPageIndex == _initalPageIndex)
+            || ([self.delegate respondsToSelector:@selector(getCloseAnimationView:)] && [self.delegate getCloseAnimationView:_currentPageIndex] != nil)) {
                 [self performCloseAnimationWithScrollView:scrollView];
                 return;
             }
