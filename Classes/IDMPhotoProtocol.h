@@ -58,5 +58,8 @@
 - (NSString *)caption;
 
 - (UIImage *)thumbnailImage;
+// Return placeholder UIImage to be displayed while loading underlyingImage
+// Return nil if there is no placeholder
+- (UIImage *)placeholderImage;
 
 @end

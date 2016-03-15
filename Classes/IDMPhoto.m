@@ -161,43 +161,20 @@ caption = _caption;
                 return;
             }
 
-            NSURL *URL = [NSURL URLWithString:_photoURL];
-            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-            manager.responseSerializer = [AFImageResponseSerializer serializer];
-            [manager GET:URL.absoluteString parameters:nil progress:^(NSProgress *downloadProgress) {
-                CGFloat progress = ((CGFloat)downloadProgress.completedUnitCount)/((CGFloat)downloadProgress.totalUnitCount);
-                [self updateProgress:progress];
-            } success:^(NSURLSessionDataTask *task, id responseObject) {
-                UIImage *image = responseObject;
-                [self loadFinished:image];
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-
+            // Load async from web (using SDWebImageManager)
+            SDWebImageManager *manager = [SDWebImageManager sharedManager];
+            [manager downloadImageWithURL:_photoURL options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                CGFloat progress = ((CGFloat)receivedSize)/((CGFloat)expectedSize);
+                if (self.progressUpdateBlock) {
+                    self.progressUpdateBlock(progress);
+                }
+            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                if (image) {
+                    self.underlyingImage = image;
+                    [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
+                }
             }];
 
-//            // Load async from web (using AFNetworking)
-//            NSURLRequest *request = [[NSURLRequest alloc] initWithURL:_photoURL
-//                                                          cachePolicy:NSURLRequestReturnCacheDataElseLoad
-//                                                      timeoutInterval:0];
-//
-//            AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-//            op.responseSerializer = [AFImageResponseSerializer serializer];
-//
-//            [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                UIImage *image = responseObject;
-//                [self loadFinished:image];
-////                self.underlyingImage = image;
-////                [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
-//            } failure:^(AFHTTPRequestOperation *operation, NSError *error) { }];
-//
-//            [op setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-//                CGFloat progress = ((CGFloat)totalBytesRead)/((CGFloat)totalBytesExpectedToRead);
-//                [self updateProgress:progress];
-////                if (self.progressUpdateBlock) {
-////                    self.progressUpdateBlock(progress);
-////                }
-//            }];
-//
-//            [[NSOperationQueue mainQueue] addOperation:op];
         } else {
             // Failed - no source
             self.underlyingImage = nil;
