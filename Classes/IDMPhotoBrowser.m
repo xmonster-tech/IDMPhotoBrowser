@@ -7,6 +7,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <AsyncDisplayKit/ASDisplayNode.h>
 #import "IDMPhotoBrowser.h"
 #import "IDMZoomingScrollView.h"
 
@@ -24,8 +25,9 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 
 	// Views
 	UIScrollView *_pagingScrollView;
-    UIPageControl *_pageControl;
-	
+//    UIPageControl *_pageControl;
+    UILabel *_pageLabel;
+
     // Gesture
     UIPanGestureRecognizer *_panGesture;
 
@@ -612,14 +614,22 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 	[self.view addSubview:_pagingScrollView];
     
     //page control
-    _pageControl = [[UIPageControl alloc] init];
-    _pageControl.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2, [[UIScreen mainScreen] bounds].size.height - 20);
-    _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
-    _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(CGFloat)217/255 green:(CGFloat)70/255 blue:(CGFloat)72/255 alpha:1];
-    _pageControl.enabled = NO;
-    _pageControl.numberOfPages = [self numberOfPhotos];
-    _pageControl.currentPage = _initalPageIndex;
-    [self.view addSubview:_pageControl];
+    _pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
+    _pageLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _pageLabel.textColor = [UIColor whiteColor];
+    _pageLabel.font = [UIFont systemFontOfSize:12];
+    _pageLabel.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2, [[UIScreen mainScreen] bounds].size.height - 20);
+    _pageLabel.text = [NSString stringWithFormat:@"%@/%@", @(_initalPageIndex + 1), @([self numberOfPhotos])];
+    [self.view addSubview:_pageLabel];
+
+//    _pageControl = [[UIPageControl alloc] init];
+//    _pageControl.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2, [[UIScreen mainScreen] bounds].size.height - 20);
+//    _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+//    _pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:(CGFloat)217/255 green:(CGFloat)70/255 blue:(CGFloat)72/255 alpha:1];
+//    _pageControl.enabled = NO;
+//    _pageControl.numberOfPages = [self numberOfPhotos];
+//    _pageControl.currentPage = _initalPageIndex;
+//    [self.view addSubview:_pageControl];
     
 
     // Transition animation
@@ -1232,7 +1242,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         if(_arrowButtonsChangePhotosAnimated) [self updateToolbar];
     }
     NSInteger page = _pagingScrollView.contentOffset.x / _pagingScrollView.frame.size.width;
-    _pageControl.currentPage = page;
+//    _pageControl.currentPage = page;
+    _pageLabel.text = [NSString stringWithFormat:@"%@/%@", @(page + 1), @([self numberOfPhotos])];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
