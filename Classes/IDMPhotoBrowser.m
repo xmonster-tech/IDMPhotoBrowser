@@ -614,7 +614,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 	[self.view addSubview:_pagingScrollView];
     
     //page control
-    _pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 35, 20)];
+    _pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+    _pageLabel.textAlignment = NSTextAlignmentCenter;
     _pageLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _pageLabel.textColor = [UIColor whiteColor];
     _pageLabel.font = [UIFont systemFontOfSize:12];
