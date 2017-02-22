@@ -163,12 +163,12 @@ caption = _caption;
 
             // Load async from web (using SDWebImageManager)
             SDWebImageManager *manager = [SDWebImageManager sharedManager];
-            [manager downloadImageWithURL:_photoURL options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            [manager loadImageWithURL:_photoURL options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL *targetURL) {
                 CGFloat progress = ((CGFloat)receivedSize)/((CGFloat)expectedSize);
                 if (self.progressUpdateBlock) {
                     self.progressUpdateBlock(progress);
                 }
-            } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            } completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
                 if (image) {
                     self.underlyingImage = image;
                     [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
